@@ -13,6 +13,7 @@
  *                                                                       *
  ************************************************************************/
 #pragma once
+#include <cguid.h>
 #include "z_com_dll_lock.hpp"
 
 class ZLComDllModule
