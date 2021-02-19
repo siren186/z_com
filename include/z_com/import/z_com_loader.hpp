@@ -28,7 +28,7 @@ protected:
     ZLComInterfacePtr<TInterface> m_mudule;
 
 public:
-    HRESULT Initialize(const wchar_t* pszDllPath = NULL)
+    HRESULT Initialize(LPCTSTR pszDllPath = NULL)
     {
         HRESULT hr = S_OK;
         BOOL bRetVal = FALSE;
