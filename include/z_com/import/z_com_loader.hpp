@@ -33,11 +33,14 @@ public:
         HRESULT hr = S_OK;
         BOOL bRetVal = FALSE;
         if (pszDllPath)
-            bRetVal = m_mudule.LoadInterface(pszDllPath);
-        if (bRetVal == FALSE)
         {
-            hr = GetLastError();
-            return hr;
+            bRetVal = m_mudule.LoadInterface(pszDllPath);
+        }
+
+        if (!bRetVal)
+        {
+            DWORD dwErr = ::GetLastError();
+            hr = HRESULT_FROM_WIN32(dwErr);
         }
         return hr;
     }
