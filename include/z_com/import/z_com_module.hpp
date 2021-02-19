@@ -47,21 +47,21 @@ public:
 public:
     HMODULE LoadLibrary(LPCTSTR pszPathFile)
     {
-        m_hModule = ZLComModuleHandleInternalT<t_bManaged>::LoadLibrary(pszPathFile);
+        this->m_hModule = ZLComModuleHandleInternalT<t_bManaged>::LoadLibrary(pszPathFile);
         HRESULT hRet = _ComInitFuncs();
-        return m_hModule;
+        return this->m_hModule;
     }
 
     HRESULT DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
     {
-        if (m_pfnDllGetClassObject == NULL || m_hModule == NULL)
+        if (m_pfnDllGetClassObject == NULL || this->m_hModule == NULL)
             return E_FAIL;
         return m_pfnDllGetClassObject(rclsid, riid, ppv);
     }
 
     HRESULT DllCanUnloadNow()
     {
-        if (m_pfnDllCanUnloadNow == NULL || m_hModule == NULL)
+        if (m_pfnDllCanUnloadNow == NULL || this->m_hModule == NULL)
             return S_OK;
         return m_pfnDllCanUnloadNow();
     }
@@ -70,13 +70,13 @@ protected:
     HRESULT _ComInitFuncs()
     {
         HRESULT hResult = E_FAIL;
-        if (Handle() == NULL)
+        if (this->Handle() == NULL)
             return E_FAIL;
 
         m_pfnDllCanUnloadNow = 
-            (pfnZLDllCanUnloadNow*)GetProcAddress(ZL_PFN_DLLCANUNLOADNOW);
+            (pfnZLDllCanUnloadNow*)this->GetProcAddress(ZL_PFN_DLLCANUNLOADNOW);
         m_pfnDllGetClassObject = 
-            (pfnZLDllGetClassObject*)GetProcAddress(ZL_PFN_DLLGETCLASSOBJECT);
+            (pfnZLDllGetClassObject*)this->GetProcAddress(ZL_PFN_DLLGETCLASSOBJECT);
 
         if (m_pfnDllCanUnloadNow != NULL || m_pfnDllGetClassObject != NULL)
             hResult = S_OK;

@@ -43,7 +43,7 @@ ZLComObject<T>::~ZLComObject()
 template <class T>
 HRESULT ZLComObject<T>::QueryInterface( REFIID riid, void **ppvObject )
 {
-    HRESULT hr = _InternalQueryInterface(riid, ppvObject);
+    HRESULT hr = this->_InternalQueryInterface(riid, ppvObject);
     if (SUCCEEDED(hr))
     {
         AddRef();

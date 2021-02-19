@@ -16,7 +16,7 @@
 #include "z_com_auto_ptr.hpp"
 #include "z_com_module.hpp"
 
-template<class T, const CLSID* pclsid = NULL, const IID* piid = &__uuidof(T)>
+template<class T, const CLSID* pclsid = (const CLSID*)NULL, const IID* piid = &__uuidof(T)>
 class ZLComInterfacePtr : public ZLComAutoPtr<T>
 {
 public:
@@ -67,7 +67,7 @@ public:
 
     void Free()
     {
-        Release();
+        this->Release();
         //if (SUCCEEDED(m_hComDll.DllCanUnloadNow()))
         {
             m_hComDll.FreeLibrary();
@@ -90,14 +90,14 @@ protected:
             IID_IClassFactory, (void**)&spClassFactory);
         if (SUCCEEDED(hRetCode) && spClassFactory != NULL )
         {
-            hRetCode = spClassFactory->CreateInstance(NULL, iid, (void**)&m_pT);
+            hRetCode = spClassFactory->CreateInstance(NULL, iid, (void**)&(this->m_pT));
             if (FAILED(hRetCode))
                 return hRetCode;
         }
         else
         {
             hRetCode = m_hComDll.DllGetClassObject(clsid, 
-                iid, (void**)&m_pT);
+                iid, (void**)&(this->m_pT));
             if (FAILED(hRetCode))
                 return hRetCode;
         }
