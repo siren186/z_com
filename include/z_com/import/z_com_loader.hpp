@@ -28,21 +28,25 @@ protected:
     ZLComInterfacePtr<TInterface> m_mudule;
 
 public:
-    HRESULT Initialize(LPCTSTR pszDllPath = NULL)
+    HRESULT Initialize(LPCTSTR dllpath)
     {
-        HRESULT hr = S_OK;
-        BOOL bRetVal = FALSE;
-        if (pszDllPath)
+        if (!dllpath)
         {
-            bRetVal = m_mudule.LoadInterface(pszDllPath);
+            return E_INVALIDARG;
         }
 
-        if (!bRetVal)
+        BOOL bRet = m_mudule.LoadInterface(dllpath);
+        if (!bRet)
         {
-            DWORD dwErr = ::GetLastError();
-            hr = HRESULT_FROM_WIN32(dwErr);
+            DWORD dw = ::GetLastError();
+            HRESULT hr = HRESULT_FROM_WIN32(dw);
+            if (SUCCEEDED(hr))
+            {
+                hr = E_UNEXPECTED;
+            }
+            return hr;
         }
-        return hr;
+        return S_OK;
     }
 
     HRESULT UnInitialize()
